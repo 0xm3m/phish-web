@@ -229,7 +229,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
-    <p style="text-align: center;">Please register using the provided form to receive SEBI updates directly to your email address.</p>
+    <p style="text-align: center;">Please register using the provided form to receive regulatory updates directly to your email address.</p>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>">
         <label for="username">Name:</label>
         <input type="text" id="username" name="username">
