@@ -1,3 +1,41 @@
+<?php
+$username = "example_user";
+$password = "password";
+$dbname = "paridb";
+
+try {
+    $conn = new PDO("mysql:host=localhost;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $designation = $_POST["designation"];
+    $empid = $_POST["empid"];
+    $phone = $_POST["phone"];
+    $registration_date = date("Y-m-d");
+    try{
+	    $sql = "INSERT INTO users (username, designation, empid, phone, registration_date) VALUES (:username, :designation, :empid, :phone, :registration_date)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':designation', $designation);
+    $stmt->bindParam(':empid', $empid);
+    $stmt->bindParam(':phone', $phone);
+    $stmt->bindParam(':registration_date', $registration_date);
+	if ($stmt->execute()) {
+	    echo "<script>alert('The process will take a couple of minutes. Once it is done, voucher details will be sent through email')</script>";
+        } else {
+            echo "Error: Unable to register user.";
+        }
+    } catch(PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -199,6 +237,8 @@
         <input type="text" id="designation" name="designation">
         <label for="empid">Employee ID:</label>
         <input type="text" id="empid" name="empid">
+        <label for="empid">Email Address:</label>
+        <input type="text" id="email" name="email">
         <label for="phone">Mobile Number:</label>
         <input type="tel" id="phone" name="phone">
         <input type="submit" value="Register">
